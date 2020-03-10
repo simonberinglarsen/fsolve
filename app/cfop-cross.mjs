@@ -60,7 +60,7 @@ export class CFOPCross {
     shortestSolve() {
         const solves = [];
         this.solveAllEdges('', solves);
-        const first = solves
+        const best = solves
             .map(s => {
                 const solve = new Algorithm(s)
                     .reduceCancelMoves()
@@ -73,7 +73,7 @@ export class CFOPCross {
                 }
             })
             .sort((a, b) => a.length - b.length)[0];
-        return first.solve;
+        return best.solve;
     }
 
     solve() {
