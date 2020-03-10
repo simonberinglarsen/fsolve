@@ -41,51 +41,47 @@ export class CFOPCross {
         return ` D'`;
     }
 
-    solveMoreEdges() {
-        let best = this.score();
-        let bestAlg = '';
-        this.allCrossAlgs.forEach(alg => {
-            const undoMoves = [...this.cube.edgeFaces];
-            this.cube.doMoves(alg);
-            let score = this.score();
-            const sameScore = score === best;
-            const shorterAlg = alg.split(' ').length < bestAlg.split(' ').length;
-            const newBest = score > best || (sameScore && shorterAlg);
-            if (newBest) {
-                best = score;
-                bestAlg = alg;
+    solveAllEdges(currentAlg, solves) {
+        const currentScore = this.score();
+        if (currentScore === 4) {
+            solves.push(currentAlg);
+            return;
+        }
+        const undoAll = [...this.cube.edgeFaces];
+        this.allCrossAlgs.forEach(a => {
+            this.cube.doMoves(a);
+            if (this.score() > currentScore) {
+                this.solveAllEdges(`${currentAlg} ${a}`, solves);
             }
-            this.cube.edgeFaces = [...undoMoves];
+            this.cube.edgeFaces = [...undoAll];
         });
-        return bestAlg;
     }
 
-    solveAllEdges() {
-        const undoAll = [...this.cube.edgeFaces];
-        const crossSolution = [];
-        while (this.score() < 4) {
-            const bestAlg = this.solveMoreEdges();
-            if (bestAlg === '') {
-                throw Error('should never happen');
-            }
-            crossSolution.push(bestAlg);
-            this.cube.doMoves(bestAlg);
-            this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
-        }
-        this.cube.edgeFaces = [...undoAll];
-        return crossSolution;
+    shortestSolve() {
+        const solves = [];
+        this.solveAllEdges('', solves);
+        const first = solves
+            .map(s => {
+                const solve = new Algorithm(s)
+                    .reduceCancelMoves()
+                    .reduceYRotations()
+                    .result();
+                const length = solve.split(' ').length;
+                return {
+                    length: length,
+                    solve: solve
+                }
+            })
+            .sort((a, b) => a.length - b.length)[0];
+        return first.solve;
     }
 
     solve() {
         const undoAll = [...this.cube.edgeFaces];
-        let res = this.solveAllEdges().join(' ');
-        res = new Algorithm(res)
-            .reduceCancelMoves()
-            .reduceYRotations()
-            .result();
-        this.cube.doMoves(res);
-        res = res + this.adjustDownFace();
+        let bestSolve = this.shortestSolve();
+        this.cube.doMoves(bestSolve);
+        bestSolve = bestSolve + this.adjustDownFace();
         this.cube.edgeFaces = [...undoAll];
-        return res;
+        return bestSolve;
     }
 }

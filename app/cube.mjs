@@ -157,7 +157,10 @@ export class Cube {
     }
 
     doMoves(moves) {
-        moves.split(' ').forEach(m => this.doMove(m));
+        if(!moves || moves.length === 0) {
+            return;
+        }
+        moves.trim().split(' ').forEach(m => this.doMove(m));
     }
 
     getScramble() {
