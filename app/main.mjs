@@ -13,14 +13,21 @@ class App {
     start() {
         this.initComponents();
         $('#btn-test').click(() => {
-            this.doThings();
+            this.solveCross();
+        });
+        $('#btn-toggle-view').click(() => {
+            this.toggleView();
         });
 
         this.cube.initCube();
         this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
     }
 
-    doThings() {
+    toggleView() {
+        $('#cube').toggleClass('d-none');
+    }
+
+    solveCross() {
         let scramble = this.cube.getScramble();
         $('#scramble-text').text(`${scramble}`);
         this.cube.initCube();
