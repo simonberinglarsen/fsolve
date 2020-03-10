@@ -157,7 +157,7 @@ export class Cube {
     }
 
     doMoves(moves) {
-        if(!moves || moves.length === 0) {
+        if (!moves || moves.length === 0) {
             return;
         }
         moves.trim().split(' ').forEach(m => this.doMove(m));

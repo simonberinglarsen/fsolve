@@ -29,8 +29,10 @@ class App {
 
         let solver = new CFOPCross(this.cube, this.store);
         const cross = solver.solve();
-        $('#cross-text').text(`${cross.split(' ').length}: ${cross}`);
+        const solveLength = cross.split(' ').length;
+        $('#cross-text').text(`${solveLength}: ${cross}`);
         this.cube.doMoves(cross);
+
         this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
     }
 
