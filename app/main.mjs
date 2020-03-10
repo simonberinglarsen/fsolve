@@ -12,15 +12,19 @@ class App {
 
     start() {
         this.initComponents();
+        this.initEventHandlers();
+
+        this.cube.initCube();
+        this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
+    }
+
+    initEventHandlers() {
         $('#btn-test').click(() => {
             this.solveCross();
         });
         $('#btn-toggle-view').click(() => {
             this.toggleView();
         });
-
-        this.cube.initCube();
-        this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
     }
 
     toggleView() {
