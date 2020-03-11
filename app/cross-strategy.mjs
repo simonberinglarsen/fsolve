@@ -1,6 +1,6 @@
 import { Algorithm } from "./algorithm.mjs";
 
-export class CFOPCross {
+export class CrossStrategy {
     constructor(cube, store) {
         this.cube = cube;
         this.store = store;
@@ -76,7 +76,7 @@ export class CFOPCross {
         return best.solve;
     }
 
-    solve() {
+    execute() {
         const undoAll = [...this.cube.edgeFaces];
         let bestSolve = this.shortestSolve();
         this.cube.doMoves(bestSolve);

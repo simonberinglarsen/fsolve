@@ -3,6 +3,51 @@ export class Algorithm {
         this.alg = alg;
     }
 
+    getF2lAlgs() {
+        const corner2top = [
+            ``,
+            `U'`,
+            `U2`,
+            `U`,
+            `R U R' U'`,
+            `B U2 B'`,
+            `L' U' L`,
+            `L U' L'`,
+        ];
+        const whiteOnTop = [
+            `R U2 R' U' R U R'`,
+            `Y U' L' U L U2 L' U' L U' L' U L`,
+
+            `U R U2 R' U R U' R'`,
+            `U2 F' U' F Y U' L' U L`,
+
+            `U2 R U R' U R U' R'`,
+            `U' F' U2 F Y U' L' U L`,
+
+            `U R U' R' U2 R U' R' U R U' R'`,
+            `Y L' U2 L U L' U' L`,
+        ];
+        const whiteOnSide = [
+            ``,
+        ];
+        const whiteOnFront = [
+            ``,
+        ];
+
+        let algs = [];
+        corner2top.forEach(a => {
+            whiteOnTop.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
+            whiteOnSide.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
+            whiteOnFront.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
+        });
+        algs = algs
+            .filter((v,i) => algs.indexOf(v) === i)
+            .filter((a) => a && a.length > 0)
+        
+
+        return algs;
+    }
+
     getCrossAlgs() {
         const basicAlgs = [
             //FD
