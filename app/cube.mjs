@@ -154,13 +154,22 @@ export class Cube {
             this.doMove(`D'`);
             this.doMove(`Y'`);
         });
+        mapMove('f', () => {
+            this.doMove(`F`);
+            this.doMove(`S'`);
+        });
     }
 
     doMoves(moves) {
         if (!moves || moves.length === 0) {
             return;
         }
-        moves.trim().split(' ').forEach(m => this.doMove(m));
+        try {
+            moves.trim().split(' ').forEach(m => this.doMove(m));
+        }
+        catch(e) {
+            throw e;
+        }
     }
 
     getScramble() {

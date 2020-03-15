@@ -10,40 +10,80 @@ export class Algorithm {
             `U2`,
             `U`,
             `R U R' U'`,
-            `B U2 B'`,
+            `R' U2 R U'`,
+            `L U2 L`,
             `L' U' L`,
-            `L U' L'`,
         ];
         const whiteOnTop = [
+            `R U R' U' R U R' U' R U R' U'`,
+            `R U' R' Y L' U2 L Y'`,
+            `R' U R Y L' U2 L U L' U' L Y'`,
+            `R' U R2 U' R'`,
+            `L U' L' U' R U R' U R U' R'`,
+            `U2 L U2 L' Y L' U L Y'`,
+            `L' U' L Y L' U2 L U' L' U L Y'`,
+            `L' R U2 R' L`,
+
             `R U2 R' U' R U R'`,
-            `Y U' L' U L U2 L' U' L U' L' U L`,
-
+            `U' Y L' U L U L' U L U' L' U L Y'`,
             `U R U2 R' U R U' R'`,
-            `U2 F' U' F Y U' L' U L`,
-
+            `U2 Y' R' U' R U' R' U R Y`,
             `U2 R U R' U R U' R'`,
-            `U' F' U2 F Y U' L' U L`,
-
-            `U R U' R' U2 R U' R' U R U' R'`,
-            `Y L' U2 L U L' U' L`,
+            `U' Y' R' U2 R U' R' U R Y`,
+            `U R U' R' U' R U' R' U R U' R'`,
+            `Y L' U2 L U L' U' L Y'`,
         ];
         const whiteOnSide = [
-            ``,
+            `U' R U2 R' U R U R'`,
+            `U2 R' F R F' U2 R U R'`,
+            `R' U R U' Y L' U L Y'`,
+            `R' U' R2 U R'`,
+            `L' f U f' R U R'`,
+            `U L U2 L' U' R U R'`,
+            `U2 L' U L Y L' U2 L Y'`,
+            `U2 L' U' L U2 R U R'`,
+
+            `U' R U' R' U R U R'`,
+            `R U' R' U2 Y L' U' L Y'`,
+            `R U R'`,
+            `U Y L' U2 L U2 L' U L Y'`,
+            `U' R U R' U R U R'`,
+            `U Y L' U' L U2 L' U L Y'`,
+            `R' U2 R2 U R2 U R`,
+            `Y U' L' U L Y'`,
         ];
         const whiteOnFront = [
-            ``,
+            `U' R U' R' U2 R U' R'`,
+            `U' R U R' U Y L' U' L Y'`,
+            `U R' U2 R Y L' U' L Y'`,
+            `U2 R f' U' F U' Y L' U' L Y'`,
+            `U L U L' U' Y L' U' L Y'`,
+            `U L U' L' R U' R'`,
+            `U2 L' U2 L U2 Y L' U' L Y'`,
+            `U' L F' L' F U Y L' U' L Y'`,
+
+            `U R U' R'`,
+            `U' R U2 R' U Y L' U' L Y'`,
+            `U' R U R' U2 R U' R'`,
+            `U' R U' R' U Y L' U' L Y'`,
+            `U' R U2 R' U2 R U' R'`,
+            `Y L' U' L Y'`,
+            `R U2 R' U R U R' U R U' R'`,
+            `Y U L' U L U' L' U' L Y'`,
         ];
 
         let algs = [];
+
         corner2top.forEach(a => {
             whiteOnTop.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
             whiteOnSide.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
             whiteOnFront.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
         });
+
         algs = algs
-            .filter((v,i) => algs.indexOf(v) === i)
+            .filter((v, i) => algs.indexOf(v) === i)
             .filter((a) => a && a.length > 0)
-        
+
 
         return algs;
     }
@@ -104,44 +144,90 @@ export class Algorithm {
     }
 
     reduceCancelMoves() {
-        const alg = this.alg;
-        const temp = ' ' + alg
-            .replace(` U U' `, ' ')
-            .replace(` D D' `, ' ')
-            .replace(` R R' `, ' ')
-            .replace(` L L' `, ' ')
-            .replace(` F F' `, ' ')
-            .replace(` B B' `, ' ')
+        const alg = ' ' + this.alg + ' ';
+        const expanded = alg
+            .replace(/U2 /g, 'U U ')
+            .replace(/D2 /g, 'D D ')
+            .replace(/R2 /g, 'R R ')
+            .replace(/L2 /g, 'L L ')
+            .replace(/F2 /g, 'F F ')
+            .replace(/B2 /g, 'B B ')
+            .replace(/Y2 /g, 'Y Y ');
 
-            .replace(` U2 U2 `, ' ')
-            .replace(` D2 D2 `, ' ')
-            .replace(` R2 R2 `, ' ')
-            .replace(` L2 L2 `, ' ')
-            .replace(` F2 F2 `, ' ')
-            .replace(` B2 B2 `, ' ')
+        let reduced = expanded;
+        while (true) {
+            const beforeReduction = reduced.length;
+            reduced = reduced
+                .replace(/U U U U /g, '')
+                .replace(/D D D D /g, '')
+                .replace(/R R R R /g, '')
+                .replace(/L L L L /g, '')
+                .replace(/F F F F /g, '')
+                .replace(/B B B B /g, '')
+                .replace(/Y Y Y Y /g, '')
 
-            .replace(` U' U `, ' ')
-            .replace(` D' D `, ' ')
-            .replace(` R' R `, ' ')
-            .replace(` L' L `, ' ')
-            .replace(` F' F `, ' ')
-            .replace(` B' B `, ' ')
+                .replace(/U' U' U' U' /g, '')
+                .replace(/D' D' D' D' /g, '')
+                .replace(/R' R' R' R' /g, '')
+                .replace(/L' L' L' L' /g, '')
+                .replace(/F' F' F' F' /g, '')
+                .replace(/B' B' B' B' /g, '')
+                .replace(/Y' Y' Y' Y' /g, '')
 
+                .replace(/U U U /g, `U' `)
+                .replace(/D D D /g, `D' `)
+                .replace(/R R R /g, `R' `)
+                .replace(/L L L /g, `L' `)
+                .replace(/F F F /g, `F' `)
+                .replace(/B B B /g, `B' `)
+                .replace(/Y Y Y /g, `Y' `)
 
-            .replace(` U U `, ' U2 ')
-            .replace(` D D `, ' D2 ')
-            .replace(` L L `, ' L2 ')
-            .replace(` R R `, ' R2 ')
-            .replace(` F F `, ' F2 ')
-            .replace(` B B `, ' B2 ')
+                .replace(/U' U' U' /g, `U `)
+                .replace(/D' D' D' /g, `D `)
+                .replace(/R' R' R' /g, `R `)
+                .replace(/L' L' L' /g, `L `)
+                .replace(/F' F' F' /g, `F `)
+                .replace(/B' B' B' /g, `B `)
+                .replace(/Y' Y' Y' /g, `Y `)
 
-            .replace(` U' U' `, ' U2 ')
-            .replace(` D' D' `, ' D2 ')
-            .replace(` L' L' `, ' L2 ')
-            .replace(` R' R' `, ' R2 ')
-            .replace(` F' F' `, ' F2 ')
-            .replace(` B' B' `, ' B2 ') + ' ';
-        this.alg = temp.trim();
+                .replace(/U U' /g, '')
+                .replace(/D D' /g, '')
+                .replace(/R R' /g, '')
+                .replace(/L L' /g, '')
+                .replace(/F F' /g, '')
+                .replace(/B B' /g, '')
+                .replace(/Y Y' /g, '')
+
+                .replace(/U' U /g, '')
+                .replace(/D' D /g, '')
+                .replace(/R' R /g, '')
+                .replace(/L' L /g, '')
+                .replace(/F' F /g, '')
+                .replace(/B' B /g, '')
+                .replace(/Y' Y /g, '');
+            const cannotReduceMore = reduced.length === beforeReduction;
+            if (cannotReduceMore) {
+                break;
+            }
+        }
+
+        let collapse = reduced
+        .replace(/U U /g, 'U2 ')
+        .replace(/D D /g, 'D2 ')
+        .replace(/R R /g, 'R2 ')
+        .replace(/L L /g, 'L2 ')
+        .replace(/F F /g, 'F2 ')
+        .replace(/B B /g, 'B2 ')
+        .replace(/Y Y /g, 'Y2 ')
+        .replace(/U' U' /g, 'U2 ')
+        .replace(/D' D' /g, 'D2 ')
+        .replace(/R' R' /g, 'R2 ')
+        .replace(/L' L' /g, 'L2 ')
+        .replace(/F' F' /g, 'F2 ')
+        .replace(/B' B' /g, 'B2 ')
+        .replace(/Y' Y' /g, 'Y2 ')
+
+        this.alg = collapse.trim();
         return this;
     }
 

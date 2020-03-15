@@ -56,17 +56,44 @@
         .face-5 {
             background-color: #fff;
         }
+
+        .roofpig {
+            height: 250px;
+            width: 250px;
+            color: white;
+            border: 0px !important;
+        }
+
+        .roofpig * {
+            border: 0px !important;
+        }
+
+        #help-1 {
+            display: none;
+        }
+
+        .roofpig-button {
+            background-color: inherit !important;
+            color:white;
+            border: 1px solid gray;
+        }
     </style>
 </head>
 
 <body>
+    
     <div class="m-4">
         <button id="btn-f2l" class="btn btn-primary">F2L</button>
         <button id="btn-cross" class="btn btn-secondary">Cross</button>
         <button id="btn-scramble" class="btn btn-secondary">Scramble</button>
         <button id="btn-toggle-view" class="btn btn-secondary">Toggle View</button>
     </div>
-    <div id="cube" class="m-4 d-none">
+    <div class="d-flex flex-row">
+        <div id="cube" class="m-4">
+        </div>
+        <div>
+            <iframe id="cube-viewer" src="blank" style="height:500px;width:800px;"></iframe>
+        </div>
     </div>
     <div class="card card-body m-4">
         <div>
@@ -81,6 +108,7 @@
             <span class="h3">f2l</span>
             <pre id="f2l-text"></pre>
         </div>
+        
     </div>
 
 
