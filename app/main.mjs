@@ -32,6 +32,13 @@ class App {
         $('#btn-toggle-view').click(() => {
             this.toggleView();
         });
+        $('#btn-copy-link').click(() => {
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val($('#external-link').text()).select();
+            document.execCommand("copy");
+            $temp.remove();
+        });
     }
 
     toggleView() {
@@ -42,13 +49,13 @@ class App {
         this.solveCross();
         let strat = new F2lStrategy(this.cube, this.store);
         const moves = strat.execute();
-        const moveCount = moves.split(' ').length;
         $('#f2l-text').text(`${moves}`);
         this.cube.doMoves(moves);
 
         const cross = $('#cross-text').text();
-        const f2l = $('#f2l-text').text();
-        let alg = `Z2 %2f%2finspection%0a ${cross} %2f%2fcross%0a ${f2l} %2f%2ff2l%0a`;
+        const f2l = $('#f2l-text').text().replace(/\/\*/g, '%2f%2f').replace(/\*\//g, '%0a');
+        
+        let alg = `Z2 %2f%2finspection%0a ${cross} %2f%2fcross%0a ${f2l}`;
         alg = alg
             .replace(/ /g, '_')
             .replace(/'/g, '-')
@@ -59,6 +66,7 @@ class App {
         const title = 'title';
         const scramble = $('#scramble-text').text();
         const url = `https://alg.cubing.net/?alg=${alg}&type=reconstruction&setup=${scramble}&title=${title}&view=playback`
+        $('#external-link').text(url);
         $('#cube-viewer').attr("src", url);
         this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
     }
@@ -75,7 +83,6 @@ class App {
 
     scrambleCube() {
         let scramble = this.cube.getScramble();
-        scramble = `R' F2 U' B U2 D B2 R F B R' U' L U' R2 D L U F' U' R L2 F D F2`;
         $('#scramble-text').text(`${scramble}`);
         this.cube.initCube();
         this.cube.doMoves(scramble);

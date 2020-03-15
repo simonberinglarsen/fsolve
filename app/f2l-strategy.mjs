@@ -18,35 +18,22 @@ export class F2lStrategy {
     }
 
     solveAllPairs(currentAlg, solves) {
-        for (let i = 0; i < 4; i++) {
-            const currentScore = this.score();
-            const undoAll = [...this.cube.edgeFaces];
-            let shortestAlg = '';
-            for (let x = 0; x < this.allAlgs.length; x++) {
-                const a = this.allAlgs[x];
+        const currentScore = this.score();
+        if (currentScore === 4) {
+            solves.push(currentAlg);
+            return;
+        }
+        const undoAll = [...this.cube.edgeFaces];
+        [``,`Y`,`Y'`,`Y2`].forEach(rotation => {
+            this.allAlgs.forEach(x => {
+                const a = `${rotation} ${x}`.trim();
                 this.cube.doMoves(a);
-
-                if (this.score() > currentScore && (shortestAlg.length === 0 ||  a.length < shortestAlg.length)) {
-                    shortestAlg = a;
+                if (this.score() > currentScore) {
+                    this.solveAllPairs(`${currentAlg} ${a}`, solves);
                 }
                 this.cube.edgeFaces = [...undoAll];
-            };
-            currentAlg = ` ${currentAlg} ${shortestAlg} Y`;
-            currentAlg = currentAlg.replace(/\s\s+/g, ' ');
-            if (shortestAlg.length > 0) {
-                this.cube.doMoves(shortestAlg);
-            }
-            else {
-                // not found
-                this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
-            }
-            this.cube.doMoves(`Y`);
-        }
-        const s = this.score();
-        if(s != 4) {
-            console.log('ERROR!!!!!!!!!');
-        }
-        solves.push(currentAlg);
+            });
+        });
     }
 
     shortestSolve() {
@@ -64,15 +51,34 @@ export class F2lStrategy {
                 }
             })
             .sort((a, b) => a.length - b.length)[0];
+        
         return best.solve;
+    }
+    
+    annotate(moves) {
+        const undoAll = [...this.cube.edgeFaces];
+        const annotated = [];
+        let maxScore = 0;
+        moves.split(' ').forEach(a => {
+            this.cube.doMove(a);
+            const scoreNow = this.score();
+            annotated.push(a);
+            if(scoreNow > maxScore) {
+                maxScore = scoreNow;
+                let s = scoreNow > 1 ? 's' : '';
+                annotated.push(`/* ${maxScore} pair${s} */`)
+            }
+        });
+
+        this.cube.edgeFaces = [...undoAll];
+        return annotated.join(' ');
     }
 
     execute() {
         const undoAll = [...this.cube.edgeFaces];
         let bestSolve = this.shortestSolve();
         this.cube.doMoves(bestSolve);
-        bestSolve = bestSolve;
         this.cube.edgeFaces = [...undoAll];
-        return bestSolve;
+        return this.annotate(bestSolve);
     }
 }

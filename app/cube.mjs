@@ -1,3 +1,5 @@
+import { Algorithm } from "./algorithm.mjs";
+
 export class Cube {
     constructor() {
         this.edgeFaces = new Array(54);
@@ -161,6 +163,7 @@ export class Cube {
     }
 
     doMoves(moves) {
+        moves = new Algorithm(moves).raw().result();
         if (!moves || moves.length === 0) {
             return;
         }

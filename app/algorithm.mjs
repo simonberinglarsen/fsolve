@@ -263,6 +263,14 @@ export class Algorithm {
         return this;
     }
 
+    raw() {
+        this.alg = this.alg
+            .replace(/\/\*.*?\*\//g,'')
+            .replace(/\s\s+/g, ' ')
+            .trim();
+        return this;
+    }
+
     result() {
         return this.alg.trim();
     }
