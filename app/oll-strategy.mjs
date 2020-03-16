@@ -33,6 +33,7 @@ export class OllStrategy {
                 return a;
             }
         }
+        this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
         throw Error('unable to solve OLL');
     }
 

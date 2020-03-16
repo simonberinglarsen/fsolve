@@ -47,6 +47,7 @@ export class PllStrategy {
             this.cube.edgeFaces = [...undoAll];
             return auf;
         }
+        this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
         throw Error('unable to solve Pll');
     }
 

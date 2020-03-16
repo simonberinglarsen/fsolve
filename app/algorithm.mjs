@@ -4,30 +4,32 @@ export class Algorithm {
     }
 
     getPllAlgs() {
-        const premoves = [``, `U `, `U' `, `U2 `];
 
-        const pllCorner = [
+        const pllCornerT = `R U R' U' R' F R2 U' R' U' R U R' F'`;
+        const pllCornerE = `X' R U' R' D R U R' D' R U R' D R U' R' D' X`;
+        const premoves = [
             ``,
-            `R U R' U' R' F R2 U' R' U' R U R' F' `, //T
-            `X' R U' R' D R U R' D' R U R' D R U' R' D' X `, // E
+            `${pllCornerE} `,
+            `${pllCornerT} `,
+            `U ${pllCornerT} `,
+            `U' ${pllCornerT} `,
+            `U2 ${pllCornerT} `,
         ];
 
         const pllEdge = [
             ``,
             `M2 U' M U2 M' U' M2 `, //ua
-            `M2 U' M U2 M' U' M2 `, //ub
+            `M2 U M U2 M' U M2 `, //ub
             `M2 U M2 U2 M2 U M2 `, // H
             `M2 U M2 U M U2 M2 U2 M U2 `, //Z
         ];
 
         const all = [];
         premoves.forEach(a1 => {
-            pllCorner.forEach(a2 => {
-                premoves.forEach(a3 => {
-                    pllEdge.forEach(a4 => {
-                        const alg = `${a1}${a2}${a3}${a4}`.trim();
-                        all.push(alg);
-                    });
+            [``, `U `, `U' `, `U2 `].forEach(a2 => {
+                pllEdge.forEach(a3 => {
+                    const alg = `${a1}${a2}${a3}`.trim();
+                    all.push(alg);
                 });
             });
         });
@@ -46,6 +48,7 @@ export class Algorithm {
         ];
 
         const olls = [
+            ``,
             `R' U2 R U R' U R`, // sune
             `L' U R U' L U R'`, // antisune
             `F' r U R' U' r' F R`, // diag.
@@ -78,10 +81,11 @@ export class Algorithm {
             `U`,
             `R U R' U'`,
             `R' U2 R U'`,
-            `L U2 L`,
+            `L U2 L'`,
             `L' U' L`,
         ];
         const whiteOnTop = [
+            
             `R U R' U' R U R' U' R U R' U'`,
             `R U' R' Y L' U2 L Y'`,
             `R' U R Y L' U2 L U L' U' L Y'`,
@@ -139,12 +143,20 @@ export class Algorithm {
             `Y U L' U L U' L' U' L Y'`,
         ];
 
+        const extras = [
+            `R U' R'`,
+            `R' U R`,
+            `L' U L`,
+            `L U' L'`,
+        ];
+
         let algs = [];
 
         corner2top.forEach(a => {
             whiteOnTop.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
             whiteOnSide.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
             whiteOnFront.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
+            extras.forEach(a2 => algs.push(`${a} ${a2}`.trim()));
         });
 
         algs = algs

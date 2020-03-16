@@ -45,49 +45,66 @@ class App {
     }
 
     solveF2l() {
-        this.scrambleCube();
+        let count =0 ;
+        const result = [];
+        let debugMsg = '';
+        while(count<1000)
+        try {
+            this.scrambleCube();
 
-        const crosstext = new CrossStrategy(this.cube, this.store).execute();
-        this.cube.doMoves(crosstext);
+            const crosstext = new CrossStrategy(this.cube, this.store).execute();
+            this.cube.doMoves(crosstext);
+            debugMsg = `---   ${$('#scramble-text').text()} Z2 ${crosstext}`;
 
-        const f2ltext = new F2lStrategy(this.cube, this.store).execute();
-        this.cube.doMoves(f2ltext);
+            const f2ltext = new F2lStrategy(this.cube, this.store).execute();
+            this.cube.doMoves(f2ltext);
+            debugMsg = `---   ${$('#scramble-text').text()} Z2 ${crosstext} ${f2ltext}`;
 
-        const olltext = new OllStrategy(this.cube, this.store).execute();
-        this.cube.doMoves(olltext);
-        
-        const plltext = new PllStrategy(this.cube, this.store).execute();
-        this.cube.doMoves(plltext);
+            const olltext = new OllStrategy(this.cube, this.store).execute();
+            this.cube.doMoves(olltext);
+            debugMsg = `---   ${$('#scramble-text').text()} Z2 ${crosstext} ${f2ltext} ${olltext}`;
 
-        //--------------------- update UI
-        $('#f2l-text').text(`${f2ltext}`);
-        $('#oll-text').text(`${olltext}`);
-        $('#pll-text').text(`${plltext}`);
-        $('#cross-text').text(`${crosstext}`);
-        const encodedF2ltext = f2ltext.replace(/\/\*/g, '%2f%2f').replace(/\*\//g, '%0a');
-        
-        const newline = `%0a`;
-        const newlineX2 = `%0a%0a`;
-        let alg = `Z2 //inspection${newlineX2}${crosstext}//cross${newlineX2}${encodedF2ltext}${newline}${olltext}//oll${newlineX2}${plltext}//pll${newline}`;
-        alg = alg
-            .replace(/ /g, '_')
-            .replace(/'/g, '-')
-            .replace(/X/g, 'x')
-            .replace(/Y/g, 'y')
-            .replace(/Z/g, 'z')
-            .replace(/\/\//g, '%2f%2f');
+            const plltext = new PllStrategy(this.cube, this.store).execute();
+            this.cube.doMoves(plltext);
+            debugMsg = `---   ${$('#scramble-text').text()} Z2 ${crosstext} ${f2ltext} ${olltext} ${plltext}`;
 
-        const title = 'title';
-        const scramble = $('#scramble-text').text();
-        const url = `https://alg.cubing.net/?alg=${alg}&type=reconstruction&setup=${scramble}&title=${title}&view=playback`
-        $('#external-link').text(url);
-        $('#cube-viewer').attr("src", url);
-        this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
+            //--------------------- update UI
+            $('#f2l-text').text(`${f2ltext}`);
+            $('#oll-text').text(`${olltext}`);
+            $('#pll-text').text(`${plltext}`);
+            $('#cross-text').text(`${crosstext}`);
+            const encodedF2ltext = f2ltext.replace(/\/\*/g, '%2f%2f').replace(/\*\//g, '%0a');
+
+            const newline = `%0a`;
+            const newlineX2 = `%0a%0a`;
+            let alg = `Z2 //inspection${newlineX2}${crosstext}//cross${newlineX2}${encodedF2ltext}${newline}${olltext}//oll${newlineX2}${plltext}//pll${newline}`;
+            alg = alg
+                .replace(/ /g, '_')
+                .replace(/'/g, '-')
+                .replace(/X/g, 'x')
+                .replace(/Y/g, 'y')
+                .replace(/Z/g, 'z')
+                .replace(/\/\//g, '%2f%2f');
+
+            const title = 'Mr. Robot';
+            const scramble = $('#scramble-text').text();
+            const url = `https://alg.cubing.net/?alg=${alg}&type=reconstruction&setup=${scramble}&title=${title}&view=playback`
+            $('#external-link').text(url);
+            //$('#cube-viewer').attr("src", url);
+            this.store.setSlice('cube', { edgeFaces: [...this.cube.edgeFaces] });
+            count++;
+            console.log(`${count} solved`);
+            result.push(url);
+        }
+        catch (e) {
+            console.log(`FAILED!!!!!: ${debugMsg}`);
+        }
+        console.log(JSON.stringify(result));
     }
 
     scrambleCube() {
         let scramble = this.cube.getScramble();
-        scramble = `U' R2 U' R2 L' R' F B' L B2 F' D F2 D R L2 B2 F D B' D2 F2 L' R L'`;
+        //scramble = `D2 L F' R D L2 D R' U R' D' L' U2 B2 L2 D' B' D' U L D F R2 L2 U`;
         $('#scramble-text').text(`${scramble}`);
         this.cube.initCube();
         this.cube.doMoves(scramble);
