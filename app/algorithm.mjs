@@ -3,6 +3,73 @@ export class Algorithm {
         this.alg = alg;
     }
 
+    getPllAlgs() {
+        const premoves = [``, `U `, `U' `, `U2 `];
+
+        const pllCorner = [
+            ``,
+            `R U R' U' R' F R2 U' R' U' R U R' F' `, //T
+            `X' R U' R' D R U R' D' R U R' D R U' R' D' X `, // E
+        ];
+
+        const pllEdge = [
+            ``,
+            `M2 U' M U2 M' U' M2 `, //ua
+            `M2 U' M U2 M' U' M2 `, //ub
+            `M2 U M2 U2 M2 U M2 `, // H
+            `M2 U M2 U M U2 M2 U2 M U2 `, //Z
+        ];
+
+        const all = [];
+        premoves.forEach(a1 => {
+            pllCorner.forEach(a2 => {
+                premoves.forEach(a3 => {
+                    pllEdge.forEach(a4 => {
+                        const alg = `${a1}${a2}${a3}${a4}`.trim();
+                        all.push(alg);
+                    });
+                });
+            });
+        });
+
+        return all;
+    }
+
+    getOllAlgs() {
+        const premoves = [``, `U `, `U' `, `U2 `];
+
+        const precross = [
+            ``,
+            `F R U R' U' F' f R U R' U' f' `, // dot
+            `F R U R' U' F' `, // line
+            `f R U R' U' f' `, // L
+        ];
+
+        const olls = [
+            `R' U2 R U R' U R`, // sune
+            `L' U R U' L U R'`, // antisune
+            `F' r U R' U' r' F R`, // diag.
+            `r U R' U' r' F R F'`, // chameleon
+            `R2 D R' U2 R D' R' U2 R'`, // headlights
+            `F R U R' U' R U R' U' R U R' U' F'`, // sym cross
+            `R U2 R2 U' R2 U' R2 U2 R`,  // asym. cross
+        ];
+
+        const all = [];
+        premoves.forEach(a1 => {
+            precross.forEach(a2 => {
+                premoves.forEach(a3 => {
+                    olls.forEach(a4 => {
+                        const alg = `${a1}${a2}${a3}${a4}`.trim();
+                        all.push(alg);
+                    });
+                });
+            });
+        });
+
+        return all;
+    }
+
     getF2lAlgs() {
         const corner2top = [
             ``,
@@ -212,20 +279,20 @@ export class Algorithm {
         }
 
         let collapse = reduced
-        .replace(/U U /g, 'U2 ')
-        .replace(/D D /g, 'D2 ')
-        .replace(/R R /g, 'R2 ')
-        .replace(/L L /g, 'L2 ')
-        .replace(/F F /g, 'F2 ')
-        .replace(/B B /g, 'B2 ')
-        .replace(/Y Y /g, 'Y2 ')
-        .replace(/U' U' /g, 'U2 ')
-        .replace(/D' D' /g, 'D2 ')
-        .replace(/R' R' /g, 'R2 ')
-        .replace(/L' L' /g, 'L2 ')
-        .replace(/F' F' /g, 'F2 ')
-        .replace(/B' B' /g, 'B2 ')
-        .replace(/Y' Y' /g, 'Y2 ')
+            .replace(/U U /g, 'U2 ')
+            .replace(/D D /g, 'D2 ')
+            .replace(/R R /g, 'R2 ')
+            .replace(/L L /g, 'L2 ')
+            .replace(/F F /g, 'F2 ')
+            .replace(/B B /g, 'B2 ')
+            .replace(/Y Y /g, 'Y2 ')
+            .replace(/U' U' /g, 'U2 ')
+            .replace(/D' D' /g, 'D2 ')
+            .replace(/R' R' /g, 'R2 ')
+            .replace(/L' L' /g, 'L2 ')
+            .replace(/F' F' /g, 'F2 ')
+            .replace(/B' B' /g, 'B2 ')
+            .replace(/Y' Y' /g, 'Y2 ')
 
         this.alg = collapse.trim();
         return this;
@@ -265,7 +332,7 @@ export class Algorithm {
 
     raw() {
         this.alg = this.alg
-            .replace(/\/\*.*?\*\//g,'')
+            .replace(/\/\*.*?\*\//g, '')
             .replace(/\s\s+/g, ' ')
             .trim();
         return this;

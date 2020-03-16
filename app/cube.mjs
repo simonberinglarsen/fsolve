@@ -83,6 +83,9 @@ export class Cube {
 
     doMove(move) {
         const map = this.mutationMap[move];
+        if(!map) {
+            throw Error(`unknown move: ${move}`)
+        }
         this.mutate(map.srcIndex, map.destIndex);
     }
 
@@ -158,7 +161,11 @@ export class Cube {
         });
         mapMove('f', () => {
             this.doMove(`F`);
-            this.doMove(`S'`);
+            this.doMove(`S`);
+        });
+        mapMove('r', () => {
+            this.doMove(`R`);
+            this.doMove(`M'`);
         });
     }
 

@@ -74,30 +74,31 @@
 
         .roofpig-button {
             background-color: inherit !important;
-            color:white;
+            color: white;
             border: 1px solid gray;
         }
     </style>
 </head>
 
 <body>
-    
     <div class="m-4">
         <button id="btn-f2l" class="btn btn-primary">F2L</button>
-        <button id="btn-cross" class="btn btn-secondary">Cross</button>
         <button id="btn-scramble" class="btn btn-secondary">Scramble</button>
         <button id="btn-toggle-view" class="btn btn-secondary">Toggle View</button>
     </div>
-    <div class="d-flex flex-row">
-        <div id="cube" class="m-4">
-        </div>
-        <div>
-            <iframe id="cube-viewer" src="blank" style="height:500px;width:1000px;"></iframe>
+    <div id="visual">
+        <div class="d-flex flex-row">
+            <div id="cube" class="m-4">
+            </div>
+            <div>
+                <iframe id="cube-viewer" src="blank" style="height:500px;width:1000px;"></iframe>
+            </div>
         </div>
     </div>
     <div class="card card-body m-4">
         <div>
-            <span class="h3">external link <button id="btn-copy-link" class="btn btn-sm btn-success">copy to clipboard</button></span>
+            <span class="h3">external link <button id="btn-copy-link" class="btn btn-sm btn-success">copy to
+                    clipboard</button></span>
             <pre id="external-link"></pre>
         </div>
         <div>
@@ -112,7 +113,15 @@
             <span class="h3">f2l</span>
             <pre id="f2l-text"></pre>
         </div>
-        
+        <div>
+            <span class="h3">oll</span>
+            <pre id="oll-text"></pre>
+        </div>
+        <div>
+            <span class="h3">pll</span>
+            <pre id="pll-text"></pre>
+        </div>
+
     </div>
 
 
